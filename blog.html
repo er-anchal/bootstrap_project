@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Blog - Latest News and Updates</title>
+    <link rel="icon" href="assets/images/about/logo-wanderon-2025.webp" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link rel="stylesheet" href="boot.css" />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      #header {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
+      }
+
+      #header-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+      }
+      .blog-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: BLACK;
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.75) 0%,
+          rgba(0, 0, 0, 0) 21%,
+          rgba(0, 0, 0, 0) 38%,
+          rgba(0, 0, 0, 0) 51%,
+          rgba(0, 0, 0, 0) 100%,
+          rgba(0, 0, 0, 0.13) 100%
+        );
+      }
+      .row {
+        --bs-gutter-x: 0 !important;
+      }
+      #header-video video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      #stateInput {
+        padding: 10px;
+        font-size: 1.5rem !important;
+        border: 2px solid #ccc;
+        border-radius: 6px;
+      }
+
+      #gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+        max-width: 1200px;
+        margin: auto;
+        padding: 10px;
+        grid-auto-flow: dense;
+      }
+
+      .gallery-img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transform: scale(0.95);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+      }
+
+      .gallery-img.loaded {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .gallery-img:hover {
+        transform: scale(1.05);
+      }
+
+      .wide {
+        grid-column: span 2;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      .fa-earth-asia {
+        color: #465a3d;
+      }
+      .lead {
+        font-size: 2.7rem !important;
+        letter-spacing: 1px !important;
+      }
+      .blog-section .input-group {
+        display: flex;
+        align-items: center;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08) !important;
+        border-radius: 50px;
+        background: #fff;
+        overflow: hidden;
+      }
+
+      .blog-section .input-group-text {
+        background: #fff;
+        border: 0;
+        border-radius: 50px 0 0 50px;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+      .blog-section .form-control {
+        background: #fff !important;
+        box-shadow: none;
+        outline: none;
+        border: none !important;
+        font-weight: 500;
+        color: #1a365d;
+        font-size: 1.25rem;
+        border-radius: 0 50px 50px 0;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        transition: box-shadow 0.2s;
+      }
+      .blog-section .form-control:focus {
+        background: #fff !important;
+        color: #1a365d;
+        box-shadow: none;
+        border: none !important;
+        outline: none;
+      }
+      .blog-section .form-control:hover {
+        border: none !important;
+        box-shadow: none;
+      }
+
+      @media (max-width: 768px) {
+        #gallery {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .wide {
+          grid-column: span 2;
+        }
+        .lead {
+          font-size: 2.2rem !important;
+        }
+        #blog-description {
+          font-size: 1.1rem !important;
+        }
+        #blog .blog-photo img {
+          height: 400px !important;
+          top: 40% !important;
+        }
+      }
+      @media (max-width: 500px) {
+        .input-group-text {
+          padding: 2px 1px 2px 10px !important;
+        }
+        #stateInput {
+          font-size: 1rem !important;
+        }
+      }
+    </style>
+  </head>
+  <body style="background-color: rgb(202, 230, 247)">
+    <header id="header">
+      <!-- Navbar -->
+      <nav
+        class="navbar navbar-expand-lg container-fluid navbar-transparent position-fixed w-100"
+      >
+        <div class="container-fluid d-flex justify-content-between">
+          <!-- Logo -->
+          <a class="navbar-brand fw-bold" href="index.html"
+            ><img class="logo" src="assets/images/logo.png" alt=""
+          /></a>
+
+          <!-- Toggler for mobile -->
+          <button
+            class="navbar-toggler hamburger"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"
+              ><i class="fa-solid fa-bars fs-2"></i
+            ></span>
+          </button>
+
+          <!-- Navigation Links -->
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a
+                  class="nav-link active text-white"
+                  aria-current="page"
+                  href="index.html"
+                  >Home</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="honeymoon.html">Explore</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="about.html">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="blog.html">Blog</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="contact.html">Contact</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Fullscreen Background Video -->
+      <div id="header-video">
+        <video autoplay loop muted playsinline>
+          <source src="assets/videos/blog/MICE-desktop.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div class="blog-overlay">
+        <div
+          id="blog"
+          class="w-100 h-100 wrapper d-flex align-items-center justify-content-center position-relative"
+        >
+          <div
+            data-aos="zoom-in-down"
+            data-aos-delay="400"
+            data-aos-duration="1200"
+            class="position-absolute blog-photo"
+          >
+            <img
+              class="img-fluid"
+              src="assets/images/blog/blog-banner.png"
+              alt=""
+            />
+          </div>
+        </div>
+      </div>
+    </header>
+    <section class="container-fluid blog-section py-5">
+      <div class="container">
+        <div class="mb-5 align-items-center">
+          <h1 class="fw-bold mb-3 lead">
+            <i class="fa-solid fa-earth-asia me-2"></i>
+            Explore India: Travel Stories & Inspiration
+          </h1>
+          <p class="text-black fst-italic fs-3" id="blog-description">
+            Discover breathtaking destinations, hidden gems, and travel tips
+            from our latest adventures across India and beyond. Start your
+            journey here!
+          </p>
+        </div>
+        <div class="row mb-4">
+          <div class="col-12 mx-auto">
+            <div
+              class="input-group row align-items-center shadow-lg rounded-pill bg-white border border-2 border-info overflow-hidden"
+            >
+              <div
+                class="d-flex flex-row align-items-center justify-content-center"
+              >
+                <span
+                  class="input-group-text bg-white border-0 rounded-start-pill px-4"
+                >
+                  <i class="fa-solid fa-magnifying-glass text-info fs-5"></i>
+                </span>
+                <input
+                  type="text"
+                  id="stateInput"
+                  class="form-control border-0 rounded-end-pill ps-3 py-3 fs-5"
+                  placeholder="Search by destination, e.g. Tamil Nadu, Goa, Ladakh..."
+                  autocomplete="off"
+                  onfocus="this.style.background='#e0eafc'; this.style.color='#1a365d'; this.style.boxShadow='none'; this.style.border='none'; this.style.outline='none';"
+                  onblur="this.style.background='#f5faff'; this.style.color='#1a365d'; this.style.boxShadow='none'; this.style.border='none'; this.style.outline='none';"
+                  onmouseover="this.style.border='none'; this.style.boxShadow='none';"
+                  onmouseout="this.style.border='none'; this.style.boxShadow='none';"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="gallery" class="mt-4"></div>
+      </div>
+    </section>
+    <button onclick="scrollToTop()" id="scrollTopBtn" title="Go to top">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+     <footer class="container-fluid" style="background-color: black;">
+      <div class="upper_footer container-xl d-flex justify-content-center py-5">
+        <ul>
+          <li>
+            <a href="international_trips.html" class="fw-bold list-heading">International Trips</a>
+          </li>
+          <li><a href="international_trips.html">Europe</a></li>
+          <li><a href="international_trips.html">Georgia</a></li>
+          <li><a href="international_trips.html">Bali</a></li>
+          <li><a href="international_trips.html">Vietnam</a></li>
+          <li><a href="international_trips.html">Spain</a></li>
+          <li><a href="international_trips.html">Singapore</a></li>
+          <li><a href="international_trips.html">Dubai</a></li>
+        </ul>
+        <ul>
+          <li><a href="india_trips.html" class="fw-bold list-heading">India Trips</a></li>
+          <li><a href="india_trips.html">Himachal</a></li>
+          <li><a href="india_trips.html">Kashmir</a></li>
+          <li><a href="india_trips.html">Kerala</a></li>
+          <li><a href="india_trips.html">Ladakh</a></li>
+          <li><a href="india_trips.html">Meghalaya</a></li>
+          <li><a href="india_trips.html">Rajasthan</a></li>
+          <li><a href="india_trips.html">Uttarakhand</a></li>
+        </ul>
+        <ul>
+          <li><a href="honeymoon.html" class="fw-bold list-heading">WanderOn Special</a></li>
+          <li><a href="honeymoon.html">Community Trips</a></li>
+          <li><a href="honeymoon.html">Honeymoon Trips</a></li>
+          <li><a href="honeymoon.html">Corporate Trips</a></li>
+          <li><a href="honeymoon.html">Weekend Gateways</a></li>
+        </ul>
+        <ul>
+          <li><a href="index.html" class="fw-bold list-heading">Quick Links</a></li>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="blog.html">Blogs</a></li>
+          <li><a href="contact.html">Contact Us</a></li>   
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div
+        class="accordion custom-accordion container-fluid acc"
+        id="accordionExample"
+      >
+        <!-- International Trips -->
+        <div class="accordion-item w-100">
+          <h2 class="accordion-header" id="headingOne">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseOne"
+              aria-expanded="false"
+              aria-controls="collapseOne"
+            >
+              International Trips
+            </button>
+          </h2>
+          <div
+            id="collapseOne"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingOne"
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body">
+              <ul>
+                <li><a href="international_trips.html">Europe</a></li>
+          <li><a href="international_trips.html">Georgia</a></li>
+          <li><a href="international_trips.html">Bali</a></li>
+          <li><a href="international_trips.html">Vietnam</a></li>
+          <li><a href="international_trips.html">Spain</a></li>
+          <li><a href="international_trips.html">Singapore</a></li>
+          <li><a href="international_trips.html">Dubai</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- India Trips -->
+        <div class="accordion-item w-100">
+          <h2 class="accordion-header" id="headingTwo">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseTwo"
+              aria-expanded="false"
+              aria-controls="collapseTwo"
+            >
+              India Trips
+            </button>
+          </h2>
+          <div
+            id="collapseTwo"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingTwo"
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body">
+              <ul>
+               <li><a href="india_trips.html">Himachal</a></li>
+          <li><a href="india_trips.html">Kashmir</a></li>
+          <li><a href="india_trips.html">Kerala</a></li>
+          <li><a href="india_trips.html">Ladakh</a></li>
+          <li><a href="india_trips.html">Meghalaya</a></li>
+          <li><a href="india_trips.html">Rajasthan</a></li>
+          <li><a href="india_trips.html">Uttarakhand</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- WanderOn Special -->
+        <div class="accordion-item w-100">
+          <h2 class="accordion-header" id="headingThree">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseThree"
+              aria-expanded="false"
+              aria-controls="collapseThree"
+            >
+              WanderOn Special
+            </button>
+          </h2>
+          <div
+            id="collapseThree"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingThree"
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body">
+              <ul>
+               <li><a href="honeymoon.html">Community Trips</a></li>
+          <li><a href="honeymoon.html">Honeymoon Trips</a></li>
+          <li><a href="honeymoon.html">Corporate Trips</a></li>
+          <li><a href="honeymoon.html">Weekend Gateways</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="accordion-item w-100">
+          <h2 class="accordion-header" id="headingFour">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseFour"
+              aria-expanded="false"
+              aria-controls="collapseFour"
+            >
+              Quick Links
+            </button>
+          </h2>
+          <div
+            id="collapseFour"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingFour"
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body">
+              <ul>
+                <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="blog.html">Blogs</a></li>
+          <li><a href="contact.html">Contact Us</a></li>   
+          <li><a href="#">Privacy Policy</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="lower-footer container-xl d-flex flex-column justify-content-center align-items-center pt-5 px-5 text-white text-center"
+      >
+        <p class="fs-2 fw-bold add-head">WANDERON EXPERIENCES PVT LTD</p>
+        <p class="address">
+          3rd Floor, Building No-436, Phase IV, Udyog Vihar, Sector-18,
+          Gurugram, Haryana-122015
+        </p>
+        <p
+          class="d-flex gap-5 justify-content-center align-items-center address"
+        >
+          <span>hello@wanderon.in</span> <span>+91-9090403075</span
+          ><span>www.wanderon.in</span>
+        </p>
+        <p
+          class="py-2 px-5 social-icons rounded-pill d-flex justify-content-center align-items-center"
+        >
+          <span class="p-1 rounded-circle w-100"
+            ><a href=""
+              ><img src="assets/images/social/instagram.svg" alt="https://www.instagram.com/wander.on/" /></a></span
+          ><span class="p-1 rounded-circle w-100"
+            ><a href=""
+              ><img src="assets/images/social/facebook.svg" alt="https://www.facebook.com/wander.on?_rdr" /></a></span
+          ><span class="p-1 rounded-circle w-100"
+            ><a href=""
+              ><img src="assets/images/social/youtube.svg" alt="https://www.youtube.com/c/WanderOn?app=desktop" /></a></span
+          ><span class="p-1 rounded-circle w-100"
+            ><a href=""
+              ><img src="assets/images/social/linkedin.svg" alt="https://www.linkedin.com/company/wanderontravelcommunity" /></a
+          ></span>
+        </p>
+        <img
+          class="w-100 img-fluid"
+          src="assets/images/footer-desktop.webp"
+          alt=""
+        />
+      </div>
+      <div
+        class="cpyright d-flex justify-content-center align-items-center py-4 text-white container-fluid"
+      >
+        <p>&#169; WANDERON EXPERIENCES PVT LTD, All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
+    <script>
+      const input = document.getElementById("stateInput");
+      const gallery = document.getElementById("gallery");
+
+      const API_KEY =
+        "3fkLUI0TUTns1KalJkPQ8NCIsJ2Z0E7QRftW6TMXcTRKeOgQ6QEFDEL6";
+      const BASE_URL = "https://api.pexels.com/v1/search";
+
+      function fetchImages(query = "India") {
+        gallery.innerHTML = "Loading...";
+
+        fetch(`${BASE_URL}?query=${query}&per_page=30`, {
+          headers: {
+            Authorization: API_KEY,
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            gallery.innerHTML = "";
+            const photos = data.photos;
+            const columns = 4;
+            const totalRows = Math.ceil(photos.length / columns);
+
+            photos.forEach((photo, i) => {
+              const img = document.createElement("img");
+              img.src = photo.src.large;
+              img.alt = photo.photographer;
+              img.className = "gallery-img";
+              img.onload = () => img.classList.add("loaded");
+
+              const row = Math.floor(i / columns);
+              const col = i % columns;
+
+              // ✅ First two rows: first image in each row
+              if ((row === 0 || row === 1) && col === 0) {
+                img.classList.add("wide");
+              }
+
+              // ✅ Last three rows: second-last image in each row
+              const isLastThree = row >= totalRows - 3;
+              const rowStart = row * columns;
+              const rowEnd = Math.min(rowStart + columns, photos.length);
+              const secondLastIndex = rowEnd - 2;
+
+              if (isLastThree && i === secondLastIndex) {
+                img.classList.add("wide");
+              }
+
+              gallery.appendChild(img);
+            });
+          })
+          .catch((err) => {
+            gallery.innerHTML = "<p>Error loading images.</p>";
+            console.error(err);
+          });
+      }
+
+      // Initial load
+      window.addEventListener("load", () => {
+        fetchImages();
+      });
+
+      // Search input
+      input.addEventListener("keyup", function (e) {
+        if (e.key === "Enter") {
+          const state = input.value.trim();
+          if (state) fetchImages(state);
+        }
+      });
+    </script>
+    <script src="international.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
